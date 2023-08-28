@@ -8,4 +8,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="tabuleiro\NovaPasta\**" />
+    <EmbeddedResource Remove="tabuleiro\NovaPasta\**" />
+    <None Remove="tabuleiro\NovaPasta\**" />
+  </ItemGroup>
+
 </Project>
