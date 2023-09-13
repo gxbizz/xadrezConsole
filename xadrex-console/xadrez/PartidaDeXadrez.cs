@@ -60,13 +60,20 @@ namespace xadrez
             {
                 xeque = true;
             }
-            else{
+            else
+            {
                 xeque = false;
             }
-            turno++;
-            mudaJogador();
+            if (testeXequemate(adversaria(jogadorAtual)))
+            {
+                terminada = true;
+            }
+            else
+            {
+                turno++;
+                mudaJogador();
+            }
         }
-
         public void validarPosicaoDeOrigem(Posicao pos)
         {
             if (tab.peca(pos) == null)
@@ -160,6 +167,37 @@ namespace xadrez
                 }
             }
             return false;
+        }
+
+        public bool testeXequemate(Cor cor)
+        {
+            if (!estaEmXeque(cor))
+            {
+                return false;
+            }
+            foreach (Peca x in pecasEmJogo(cor))
+            {
+                bool[,] mat = x.movimentosPossiveis();
+                for (int i=0; i <tab.linhas; i++)
+                {
+                    for (int j=0; j< tab.colunas; j++)
+                    {
+                        if (mat[i, j])
+                        {
+                            Posicao origem = x.posicao;
+                            Posicao destino = new Posicao(i, j);
+                            Peca pecaCapturada = executaMovimento(origem,destino);
+                            bool testeXeque = estaEmXeque(cor);
+                            desfazMovimento(origem, destino, pecaCapturada);
+                            if (!testeXeque)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
         }
         public HashSet<Peca> pecasEmJogo(Cor cor)
         {
